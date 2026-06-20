@@ -50,9 +50,7 @@ export default defineConfig({
 				suppressWarnings: true,
 				navigateFallback: withBase('/index.html')
 			},
-			kit: {
-				includeVersionFile: true
-			}
+			kit: { includeVersionFile: true }
 		})
 	]
 });
