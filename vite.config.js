@@ -9,32 +9,39 @@ export default defineConfig({
 		sveltekit(),
 		SvelteKitPWA({
 			registerType: 'autoUpdate',
+			injectRegister: false,
+			base: viteBase,
+			scope: withBase('/'),
 			manifest: {
-				id: withBase('/'),
+				id: './',
 				name: 'UX Speak — Tests utilisateurs',
 				short_name: 'UX Speak',
 				description:
 					"Outil de capture d'observations et Customer Journey Map pour tests utilisateurs UX/UI.",
 				lang: 'fr',
-				start_url: withBase('/'),
-				scope: withBase('/'),
+				start_url: './',
+				scope: './',
 				display: 'standalone',
-				orientation: 'portrait',
+				display_override: ['standalone', 'browser'],
+				orientation: 'any',
 				theme_color: '#0d6efd',
 				background_color: '#f8f9fa',
+				prefer_related_applications: false,
 				icons: [
 					{
-						src: withBase('/pwa-192x192.png'),
+						src: 'pwa-192x192.png',
 						sizes: '192x192',
-						type: 'image/png'
+						type: 'image/png',
+						purpose: 'any'
 					},
 					{
-						src: withBase('/pwa-512x512.png'),
+						src: 'pwa-512x512.png',
 						sizes: '512x512',
-						type: 'image/png'
+						type: 'image/png',
+						purpose: 'any'
 					},
 					{
-						src: withBase('/pwa-512x512.png'),
+						src: 'pwa-512x512-maskable.png',
 						sizes: '512x512',
 						type: 'image/png',
 						purpose: 'maskable'

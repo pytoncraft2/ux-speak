@@ -52,6 +52,25 @@
 	</div>
 {/if}
 
+{#if pwa.showAndroidHelp}
+	<div class="pwa-help-backdrop" onclick={() => pwa.closeHelp()} role="presentation"></div>
+	<div class="pwa-help" role="dialog" aria-labelledby="pwa-android-title">
+		<h2 id="pwa-android-title" class="pwa-help__title">Installer sur Android</h2>
+		<ol class="pwa-help__steps">
+			<li>Ouvrez le menu <strong>⋮</strong> de Chrome (en haut à droite)</li>
+			<li>Appuyez sur <strong>Installer l'application</strong> ou <strong>Ajouter à l'écran d'accueil</strong></li>
+			<li>Confirmez avec <strong>Installer</strong></li>
+		</ol>
+		<p class="pwa-help__text">
+			Si l'option n'apparaît pas, rechargez la page une fois puis réessayez. Utilisez de
+			préférence <strong>Chrome</strong> (pas le navigateur intégré d'une autre app).
+		</p>
+		<button type="button" class="btn btn--primary" onclick={() => pwa.closeHelp()}>
+			Compris
+		</button>
+	</div>
+{/if}
+
 {#if pwa.showUnsupportedHelp}
 	<div class="pwa-help-backdrop" onclick={() => pwa.closeHelp()} role="presentation"></div>
 	<div class="pwa-help" role="dialog" aria-labelledby="pwa-unsupported-title">

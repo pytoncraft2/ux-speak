@@ -1,15 +1,18 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
+	import { base } from '$app/paths';
 	import { onMount } from 'svelte';
 
 	onMount(async () => {
-		if (!browser) return;
+		if (!browser || !('serviceWorker' in navigator)) return;
+
+		const swUrl = `${base}/sw.js`;
+		const scope = base ? `${base}/` : '/';
 
 		try {
-			const { registerSW } = await import('virtual:pwa-register');
-			registerSW({ immediate: true });
-		} catch {
-			// PWA non disponible en dehors d'un build avec le plugin
+			await navigator.serviceWorker.register(swUrl, { scope, type: 'classic' });
+		} catch (error) {
+			console.warn('Enregistrement du service worker PWA échoué:', error);
 		}
 	});
 </script>

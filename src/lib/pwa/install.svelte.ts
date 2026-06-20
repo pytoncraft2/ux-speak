@@ -23,13 +23,20 @@ function detectIos(): boolean {
 	);
 }
 
+function detectAndroid(): boolean {
+	if (!browser) return false;
+	return /android/i.test(navigator.userAgent);
+}
+
 class PwaInstallStore {
 	installEvent = $state<BeforeInstallPromptEvent | null>(null);
 	isInstalled = $state(false);
 	bannerDismissed = $state(false);
 	showIosHelp = $state(false);
+	showAndroidHelp = $state(false);
 	showUnsupportedHelp = $state(false);
 	isIos = $state(false);
+	isAndroid = $state(false);
 	initialized = $state(false);
 
 	get showBanner(): boolean {
@@ -41,6 +48,7 @@ class PwaInstallStore {
 
 		this.isInstalled = checkInstalled();
 		this.isIos = detectIos();
+		this.isAndroid = detectAndroid();
 		this.bannerDismissed = localStorage.getItem(DISMISS_KEY) === 'true';
 		this.initialized = true;
 
@@ -52,8 +60,7 @@ class PwaInstallStore {
 		const onInstalled = () => {
 			this.isInstalled = true;
 			this.installEvent = null;
-			this.showIosHelp = false;
-			this.showUnsupportedHelp = false;
+			this.closeHelp();
 		};
 
 		window.addEventListener('beforeinstallprompt', onInstallReady);
@@ -69,25 +76,37 @@ class PwaInstallStore {
 
 	closeHelp(): void {
 		this.showIosHelp = false;
+		this.showAndroidHelp = false;
 		this.showUnsupportedHelp = false;
 	}
 
 	async install(): Promise<void> {
 		if (this.installEvent) {
-			await this.installEvent.prompt();
-			const { outcome } = await this.installEvent.userChoice;
-			if (outcome === 'accepted') {
+			try {
+				await this.installEvent.prompt();
+				const { outcome } = await this.installEvent.userChoice;
+				if (outcome === 'accepted') {
+					this.installEvent = null;
+				}
+			} catch {
+				// prompt() peut échouer si l'événement a expiré
 				this.installEvent = null;
+				this.showPlatformHelp();
 			}
 			return;
 		}
 
+		this.showPlatformHelp();
+	}
+
+	private showPlatformHelp(): void {
 		if (this.isIos) {
 			this.showIosHelp = true;
-			return;
+		} else if (this.isAndroid) {
+			this.showAndroidHelp = true;
+		} else {
+			this.showUnsupportedHelp = true;
 		}
-
-		this.showUnsupportedHelp = true;
 	}
 }
 
