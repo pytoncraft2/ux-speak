@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { base, resolve } from '$app/paths';
+	import PwaInstallBanner from '$lib/components/PwaInstallBanner.svelte';
+	import PwaInstallButton from '$lib/components/PwaInstallButton.svelte';
 	import PwaRegister from '$lib/components/PwaRegister.svelte';
 	import { getCampaignStore } from '$lib/stores/campaign.svelte';
 	import { downloadFile, exportJson } from '$lib/utils/export';
@@ -59,9 +61,12 @@
 		</ul>
 
 		<div class="app-nav__actions">
+			<PwaInstallButton />
 			<button type="button" class="btn btn--sm" onclick={exportBackup}>Backup JSON</button>
 		</div>
 	</nav>
+
+	<PwaInstallBanner />
 
 	<main class="app-main">
 		{@render children()}
